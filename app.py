@@ -3,11 +3,13 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 from tkinter import messagebox
 import xml.etree.ElementTree as ET
-import random
+from dron import dron
 from lista_dron import lista_dron
 lista_dron_temporal=lista_dron()
 archivo = None  # Reinicializa la variable archivo
+dron_temporal = dron()
 route= None
+root = None
 class ScrollText(tk.Frame):
     def __init__(self, master, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
@@ -98,28 +100,87 @@ class Ventana(tk.Tk):
         self.scroll = ScrollText(self)
         self.scroll.pack()
         self.after(200, self.scroll.redraw())
-
         self.menu = Menu(self)
         self.config(menu=self.menu)
         self.filemenu = Menu(self.menu)
-        self.menu.add_cascade(label="Archivo")
+        self.menu.add_cascade(label="Archivo", command=self.open_file)
         self.filemenu.add_command(label="Abrir Archivo")
         self.filemenu.add_command(label="Guardar Archivo")
         self.filemenu.add_command(label="Salir", command=self.destroy)
         
         self.filemenu.add_separator()
-        self.menu.add_command(label="Analizar")
+        self.menu.add_command(label="Analizar", command=self.analizar_drones)
         self.menu.add_command(label="Ver reporte")
         self.menu.add_command(label="Ver errores")
     def open_file(self):
-        print("si")
-    def save_file(self):
-        print("si")
-
-    def analizar_texto(self):
-        print("si")
+        global root
+        global route
+        global archivo
+        print("Cargando archivo")
+        #? Se Carga el Archivo
+        route = askopenfilename(filetypes=[("Archivo XML", "*.xml")])
+        if not route:
+            #? Mensaje de Error si no se carga el archivo
+            tk.messagebox.showerror(title="Error", message="No se hay archivo seleccionado aun")
+            return
+        self.scroll.delete(1.0,tk.END)
+        with open(route, "r") as input_file:
+            text = input_file.read()
+            self.scroll.insert(tk.END, text)
+        self.title(f"Proyecto 2 - {route}")
+        #? Parciar XML
+        tree = ET.parse(route)
+        root = tree.getroot()
+        tk.messagebox.showinfo(title="Exito", message="Archivo cargado exitosamente")
+    def analizar_drones(self):
+        global route
+        global root
+        if not route:
+            #? Mensaje de Error si no se carga el archivo
+            tk.messagebox.showerror(title="Error", message="No se hay archivo seleccionado aun")
+            return
+        for listaDrones in root.findall("listaDrones"):
+            for codigo_an in listaDrones.findall("dron"):
+                codigo_dron = codigo_an.text
+                nuevo_dron = dron(id=codigo_dron)
+                lista_dron_temporal.add_drone(nuevo_dron)
+        lista_dron_temporal.print_list()
+        tk.messagebox.showinfo(title="Exito", message="Drones cargados exitosamente")
+        for listaSistemasDrones in root.findall("listaSistemasDrones"):
+            for sistema in listaSistemasDrones.findall("sistemaDrones"):
+                nombre = sistema.get("nombre")
+                lista_dron_temporal.name = nombre
+                for alturamax in sistema.findall("alturaMaxima"):
+                    altura_maxima = int(alturamax.text)
+                for contenido in sistema.findall("contenido"):
+                    for instruccion in contenido.findall("dron"):
+                        id_dron = instruccion.text
+                    for alturas in contenido.findall("alturas"):
+                        for altura in alturas.findall("altura"):
+                            altura_dr= altura.text
+                            altura_dron = int(altura_dr)
+                            if altura_dron <=altura_maxima:
+                                if altura_dron > lista_dron_temporal.altura_dron(id_dron):
+                                    for i in range(altura_dron):
+                                        lista_dron_temporal.up(id_dron)
+                                        lista_dron_temporal.print_list()
+                                        lista_dron_temporal.subir_dron(id_dron)
+                                        lista_dron_temporal.wait()
+                                        lista_dron_temporal.print_list()
+                                    
+                                elif altura_dron < lista_dron_temporal.altura_dron(id_dron):
+                                    lista_dron_temporal.down(id_dron)
+                                    lista_dron_temporal.bajar_dron(id_dron)
+                            else:
+                                return tk.messagebox.showerror(title="Error", message="Altura maxima superada en instrucciones")   
+                        
+        print("=" * 50)
+        print("Lista Analizada")
+        print("=" * 50)
+        lista_dron_temporal.print_list()
 
 
 
 app = Ventana()
 app.mainloop()
+
