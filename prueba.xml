@@ -1,46 +1,73 @@
 <?xml version="1.0"?>
 <config>
     <listaDrones>
-        <dron> A01 </dron>
-        <dron> A02 </dron>
-        <dron> A03 </dron>
-        <dron> A04 </dron>
+        <dron>A01</dron>
+        <dron>A02</dron>
+        <dron>A03</dron>
+        <dron>A04</dron>
     </listaDrones>
     <listaSistemasDrones>
-        <sistemaDrones nombre="NombreSistemaDrones">
+        <sistemaDrones nombre="Prueba">
             <alturaMaxima>7</alturaMaxima>
             <cantidadDrones>4</cantidadDrones>
             <contenido>
-                <dron> A01 </dron>
+                <dron>A01</dron>
                 <alturas>
-                    <altura valor="valorAltura"> 2 </altura>
+                    <altura valor="1">A</altura>
+                    <altura valor="2">b</altura>
+                    <altura valor="3">c</altura>
+                    <altura valor="4">T</altura>
+                    <altura valor="5">e</altura>
+                    <altura valor="6">f</altura>
+                    <altura valor="7">g</altura>
                 </alturas>
             </contenido>
             <contenido>
-                <dron> A02 </dron>
+                <dron>A02</dron>
                 <alturas>
-                    <altura valor="valorAltura"> 4 </altura>
+                    <altura valor="1">h</altura>
+                    <altura valor="2">e</altura>
+                    <altura valor="3">j</altura>
+                    <altura valor="4">k</altura>
+                    <altura valor="5">l</altura>
+                    <altura valor="6">m</altura>
+                    <altura valor="7">n</altura>
                 </alturas>
             </contenido>
             <contenido>
-                <dron> A03 </dron>
+                <dron>A03</dron>
                 <alturas>
-                    <altura valor="valorAltura"> 5 </altura>
+                    <altura valor="1"> o </altura>
+                    <altura valor="2"> p </altura>
+                    <altura valor="3"> q </altura>
+                    <altura valor="4"> r </altura>
+                    <altura valor="5"> s </altura>
+                    <altura valor="6"> t </altura>
+                    <altura valor="7"> u </altura>
                 </alturas>
             </contenido>
             <contenido>
-                <dron> A04 </dron>
+                <dron>A04</dron>
                 <alturas>
-                    <altura valor="valorAltura"> 7 </altura>
+                    <altura valor="1"> A </altura>
+                    <altura valor="2"> b </altura>
+                    <altura valor="3"> c </altura>
+                    <altura valor="4"> d </altura>
+                    <altura valor="5"> e </altura>
+                    <altura valor="6"> f </altura>
+                    <altura valor="7"> t </altura>
                 </alturas>
             </contenido>
         </sistemaDrones>
     </listaSistemasDrones>
     <listaMensajes>
-        <Mensaje nombre="NombreMensaje">
-            <sistemaDrones>[valorAlfanumerico]</sistemaDrones>
+        <Mensaje nombre="Test"> 
+            <sistemaDrones>Prueba</sistemaDrones>
             <instrucciones>
-                <instruccion dron="NombreDron">[valorNumericoAltura]</instruccion>
+                <instruccion dron="A01">4</instruccion>
+                <instruccion dron="A02">2</instruccion>
+                <instruccion dron="A03">5</instruccion>
+                <instruccion dron="A04">7</instruccion>
             </instrucciones>
         </Mensaje>
     </listaMensajes>
